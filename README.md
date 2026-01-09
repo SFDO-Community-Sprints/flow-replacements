@@ -4,7 +4,7 @@ Replace workflow &amp; process builder in NPSP and V4S with flow.
 
 
 # Project Name
-Please replace with your projects name
+NPSP Workflow Replacements
 
 # Project Overview
 ## Vision & Goals
@@ -13,7 +13,7 @@ Please replace with your projects vision.
 * Goal 2
 
 ## Project Vertical
-Please replace with Nonprofit, Education, or Other (if Other, explain further)
+Nonprofit
 
 ## Trailblazer Group or Slack Channel Link (access required)
 Please replace with the URL for your Trailblazer Community group and/or Slack channel issued by the Commons program team.
