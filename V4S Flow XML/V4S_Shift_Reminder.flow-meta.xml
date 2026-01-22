@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Triggers the managed V4S Volunteer Shift Reminder email alert for this Volunteer Hours record. This element is used on the scheduled path to notify volunteers before their scheduled shift.</description>
+        <name>Volunteer_Shift_Reminder_Email</name>
+        <label>Volunteer Shift Reminder Email</label>
+        <locationX>308</locationX>
+        <locationY>276</locationY>
+        <actionName>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Shift_Reminder_Email_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Shift_Reminder_Email_Alert</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Send the Volunteer Shift Reminder Email Alert to the related Contact for each Volunteer Hours record with Status equal to &quot;Confirmed&quot; the day before the Start Date IF the Contact Email is not null AND the Contact Auto Reminder Opt Out is False</description>
+    <environments>Default</environments>
+    <interviewLabel>V4S Shift Reminder {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Volunteer Hours || Record-Triggered (C/U) | Shift Reminder Email</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <filterFormula>((ISPICKVAL({!$Record.GW_Volunteers__Status__c}, &quot;Confirmed&quot;)&amp;&amp;NOT(ISBLANK({!$Record.GW_Volunteers__Contact__r.Email}))&amp;&amp;({!$Record.GW_Volunteers__Contact__r.GW_Volunteers__Volunteer_Auto_Reminder_Email_Opt_Out__c}=FALSE)))</filterFormula>
+        <object>GW_Volunteers__Volunteer_Hours__c</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Send_Email_Day_Before_Shift_Start</name>
+            <connector>
+                <targetReference>Volunteer_Shift_Reminder_Email</targetReference>
+            </connector>
+            <label>Send Email Day Before Shift Start</label>
+            <offsetNumber>-1</offsetNumber>
+            <offsetUnit>Days</offsetUnit>
+            <recordField>GW_Volunteers__Shift_Start_Date_Time__c</recordField>
+            <timeSource>RecordField</timeSource>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Draft</status>
+</Flow>
