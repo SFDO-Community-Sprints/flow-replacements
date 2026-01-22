@@ -1,3 +1,10 @@
+---
+layout: default
+title: Overview
+nav_order: 1
+has_children: false
+---
+
 # NPSP Workflow Replacements
 Create Flows to consolidate and replace Workflow Rules for NPSP and V4S packages
 
