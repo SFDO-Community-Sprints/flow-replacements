@@ -16,9 +16,10 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <description>Copies Work email field into the Email field if there is no preferred email.</description>
         <name>Set_Default_Value</name>
         <label>Set Default Value</label>
-        <locationX>1810</locationX>
+        <locationX>2690</locationX>
         <locationY>503</locationY>
         <assignmentItems>
             <assignToReference>$Record.Email</assignToReference>
@@ -45,7 +46,7 @@
         <description>If all of these fields are null: npe01__Preferred_Email__c, npe01__WorkEmail__c, npe01__HomeEmail__c, npe01__AlternateEmail__c then Work Email is updated with the email address in the standard Email field and Preferred Email is set to Work.</description>
         <name>Set_Preferred_and_Work_Email</name>
         <label>Set Preferred and Work Email</label>
-        <locationX>2074</locationX>
+        <locationX>2954</locationX>
         <locationY>395</locationY>
         <assignmentItems>
             <assignToReference>$Record.npe01__Preferred_Email__c</assignToReference>
@@ -76,10 +77,11 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <description>Copies Alternate Email field into Email field when Alternate is set to preferred email.</description>
         <name>To_Alternate</name>
         <label>To Alternate</label>
-        <locationX>1018</locationX>
-        <locationY>503</locationY>
+        <locationX>1106</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.Email</assignToReference>
             <operator>Assign</operator>
@@ -89,10 +91,11 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <description>Copies Personal Email field into the Email field when Personal is set to preferred email.</description>
         <name>To_Personal</name>
         <label>To Personal</label>
-        <locationX>1282</locationX>
-        <locationY>503</locationY>
+        <locationX>1634</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.Email</assignToReference>
             <operator>Assign</operator>
@@ -102,10 +105,11 @@
         </assignmentItems>
     </assignments>
     <assignments>
+        <description>Copies Work Email field into the Email field when Work is set to Preferred Email.</description>
         <name>To_Work</name>
         <label>To Work</label>
-        <locationX>1546</locationX>
-        <locationY>503</locationY>
+        <locationX>2162</locationX>
+        <locationY>611</locationY>
         <assignmentItems>
             <assignToReference>$Record.Email</assignToReference>
             <operator>Assign</operator>
@@ -115,9 +119,79 @@
         </assignmentItems>
     </assignments>
     <decisions>
+        <description>Checks for null value in personal email field so that null values are not copied to the email field.</description>
+        <name>Copy_1_of_Check_for_Null_Values</name>
+        <label>Check for Null Values</label>
+        <locationX>1766</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__HomeEmail__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>To_Personal</targetReference>
+            </connector>
+            <label>Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks for null value in alternate email field so that null values are not copied to the email field.</description>
+        <name>Copy_3_of_Check_for_Null_Values</name>
+        <label>Check for Null Values</label>
+        <locationX>1238</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_3_of_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__AlternateEmail__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>To_Alternate</targetReference>
+            </connector>
+            <label>Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks for null value in work email field so that null values are not copied to the email field.</description>
+        <name>Copy_4_of_Check_for_Null_Values</name>
+        <label>Check for Null Values</label>
+        <locationX>2294</locationX>
+        <locationY>503</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_4_of_Not_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__WorkEmail__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>To_Work</targetReference>
+            </connector>
+            <label>Not Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Decision element - Path 1: If preferred email field is set and email is changed, referenced preferred email is updated; Path 2: If preferred email is changed, email field is updated; Path 3: If email is updated, but no preferred email option is set</description>
         <name>Path_Chooser</name>
         <label>Path Chooser</label>
-        <locationX>1382</locationX>
+        <locationX>1832</locationX>
         <locationY>287</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
@@ -167,10 +241,10 @@
         </rules>
     </decisions>
     <decisions>
-        <description>Set Email field based on Preferred Email Type</description>
+        <description>Set Email field based on Preferred Email Type. If Null value, nothing happens.</description>
         <name>Set_Email</name>
         <label>Set Email</label>
-        <locationX>1414</locationX>
+        <locationX>1964</locationX>
         <locationY>395</locationY>
         <defaultConnector>
             <targetReference>Set_Default_Value</targetReference>
@@ -187,7 +261,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>To_Alternate</targetReference>
+                <targetReference>Copy_3_of_Check_for_Null_Values</targetReference>
             </connector>
             <label>Alternate</label>
         </rules>
@@ -209,7 +283,7 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>To_Personal</targetReference>
+                <targetReference>Copy_1_of_Check_for_Null_Values</targetReference>
             </connector>
             <label>Personal</label>
         </rules>
@@ -224,13 +298,13 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>To_Work</targetReference>
+                <targetReference>Copy_4_of_Check_for_Null_Values</targetReference>
             </connector>
             <label>Work</label>
         </rules>
     </decisions>
     <decisions>
-        <description>Sets npe01__Preferred_Email__c field based on</description>
+        <description>Sets relevent npe01__Preferred_Email__c field when Email field is updated</description>
         <name>Set_Preferred_Email</name>
         <label>Set Preferred Email</label>
         <locationX>446</locationX>
@@ -289,7 +363,7 @@
             <label>Work</label>
         </rules>
     </decisions>
-    <description>Flow combining 5 NPSP workflow rules for updates of Email-related fields on the Contact.</description>
+    <description>Simplified- Flow combining 5 NPSP workflow rules for updates of Email-related fields on the Contact. Updates RN.</description>
     <environments>Default</environments>
     <formulas>
         <description>Value of Email field when Preferred Email Type = &apos;Alternate&apos;</description>
@@ -395,8 +469,8 @@ if(len({!$Record.npe01__WorkEmail__c)}&gt;0, {!$Record.npe01__WorkEmail__c},
 if(len({!$Record.npe01__HomeEmail__c})&gt;0, {!$Record.npe01__HomeEmail__c},
 {!$Record.npe01__AlternateEmail__c}))</expression>
     </formulas>
-    <interviewLabel>Contact Email Sync {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>Contact Email Sync</label>
+    <interviewLabel>@CONTACT || C/U | Email fields updates {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>@CONTACT || C/U | Email fields updates</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>
@@ -417,7 +491,7 @@ if(len({!$Record.npe01__HomeEmail__c})&gt;0, {!$Record.npe01__HomeEmail__c},
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>1256</locationX>
+        <locationX>1706</locationX>
         <locationY>0</locationY>
         <connector>
             <targetReference>Path_Chooser</targetReference>
@@ -468,5 +542,10 @@ if(len({!$Record.npe01__HomeEmail__c})&gt;0, {!$Record.npe01__HomeEmail__c},
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
+    <textTemplates>
+        <name>ErrorMessage</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;Relevant field is empty&lt;/p&gt;</text>
+    </textTemplates>
 </Flow>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Sends a notification message to the Volunteer Manager that a new volunteer Job/Shift signup has occured</description>
+        <name>Send_Volunteer_Notification</name>
+        <label>Send Volunteer Sign Up Notification to Volunteer Manager</label>
+        <locationX>182</locationX>
+        <locationY>431</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Verify_Volunteer_Has_Email</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+        </inputParameters>
+        <inputParameters>
+            <name>bccRecipientAddressList</name>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>$User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useEmailTemplate</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <elementReference>Get_Volunteer_Sign_Up_Notification_Email_Template.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.OwnerId</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>1.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <description>Sends thank you email.</description>
+        <name>Send_Volunteer_Sign_Up_Thank_You_Email_to_Volunteer</name>
+        <label>Send Volunteer Sign Up Thank You Email to Volunteer</label>
+        <locationX>50</locationX>
+        <locationY>755</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <stringValue>CurrentUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <elementReference>$User.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>useEmailTemplate</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailTemplateId</name>
+            <value>
+                <elementReference>Get_Volunteer_Sign_Up_Thank_You_Email_Template.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>recipientId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+                <inputConfiguratorMode>Resource</inputConfiguratorMode>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>logEmailOnSend</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>1.0.1</versionString>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <description>Determines if the volunteer has an email address in order to send a thank you email.</description>
+        <name>Verify_Volunteer_Has_Email</name>
+        <label>Verify Volunteer Has Email</label>
+        <locationX>182</locationX>
+        <locationY>539</locationY>
+        <defaultConnectorLabel>No Email or Bounced</defaultConnectorLabel>
+        <rules>
+            <name>Volunteer_Has_Email</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Email</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.EmailBouncedDate</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Get_Volunteer_Sign_Up_Thank_You_Email_Template</targetReference>
+            </connector>
+            <label>Volunteer Has Email</label>
+        </rules>
+    </decisions>
+    <description>This flow is intended to replace the V4S workflow rule &quot;Volunteer Signup - Lead.&quot; Please deactivate that workflow rule before activating this flow. If you don&apos;t intend or have not integrated Volunteers for Salesforce with your website, do not activate this flow.
+
+When a new lead is created with a volunteer status of &quot;New Sign Up&quot; from a volunteer signup, then:
+1) Create a completed task logging that an automatic thank you email has been sent to the contact for signing up to be a volunteer
+2) Notify a user using the sender, recipient, and content configured in the Email Alert &quot;Volunteer Signup Notification Email Alert - Lead&quot;
+3) Send a thank you email using the sender, recipient, and content configured in the Email Alert  &quot;Volunteer Signup Thank You Email Alert - Lead&quot;
+
+If you are not using VolunteersSignUp (the older version of the Volunteer Sign Up page), you can de-activate this flow to avoid multiple emails being sent. Note that this flow only runs if a Lead is created. If Custom Settings relevant to Volunteers for Salesforce are configured with &quot;Signup Matches Existing Contacts&quot; or &quot;Signup Creates Contacts,&quot; this flow will not run on records that match to an existing contact or create a contact. If you don&apos;t intend or have not integrated Volunteers for Salesforce with your website, you should de-activate this flow.
+
+Refer to V4S Documentation to better understand configuration requirements and recommendations relevant to the original workflow rules this flow intends to replace and related assets (such as email alerts) that may need to be configured for this flow to run as intended
+        1. https://help.salesforce.com/s/articleView?id=sfdo.v4s_setup_config_email.htm&amp;type=5
+        2. https://help.salesforce.com/s/articleView?id=sfdo.v4s_setup_config_email_notifs_webs_integ.htm&amp;type=5
+        3. https://help.salesforce.com/s/articleView?id=sfdo.v4s_setup_config_vol_signups.htm&amp;type=5</description>
+    <environments>Default</environments>
+    <interviewLabel>@V4S |CONTACT || C/U | Volunteer Signup Acknowledgement Email {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>@V4S Lead | C/U | Volunteer Signup Acknowledgement Email</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Retrieves the V4S package email template &apos;Volunteer_Signup_Notification&apos; to be sent to the volunteer manager</description>
+        <name>Get_Volunteer_Sign_Up_Notification_Email_Template</name>
+        <label>Get Volunteer Sign Up Notification Email Template</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Volunteer_Notification</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Volunteer_Signup_Notification</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>EmailTemplate</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordLookups>
+        <description>Retrieves standard Volunteer thank you email.</description>
+        <name>Get_Volunteer_Sign_Up_Thank_You_Email_Template</name>
+        <label>Get Volunteer Sign Up Thank You Email Template</label>
+        <locationX>50</locationX>
+        <locationY>647</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>Send_Volunteer_Sign_Up_Thank_You_Email_to_Volunteer</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Volunteer_Signup_Thank_You</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>EmailTemplate</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Get_Volunteer_Sign_Up_Notification_Email_Template</targetReference>
+        </connector>
+        <filterFormula>OR(
+  AND(
+    ISNEW(),
+    TEXT({!$Record.GW_Volunteers__Volunteer_Status__c}) = &quot;New Sign Up&quot;
+  ),
+  AND(
+    TEXT({!$Record.GW_Volunteers__Volunteer_Status__c}) = &quot;New Sign Up&quot;,
+    TEXT({!$Record__Prior.GW_Volunteers__Volunteer_Status__c}) &lt;&gt; &quot;New Sign Up&quot;
+  )
+)</filterFormula>
+        <object>Lead</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <description>Copy the Fair Market Value field to the Amount field for an In-Kind Opportunity, when Amount is $0 or null</description>
+    <environments>Default</environments>
+    <interviewLabel>OPP || C/U | In Kind Gift {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>OPPT || C/U | In-Kind Gift</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <description>Copy the Opportunities Fair Market Value field to the Amount field</description>
+        <name>Opportunity_Copy_FMV_to_Amount</name>
+        <label>Opportunity Copy FMV to Amount</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <inputAssignments>
+            <field>Amount</field>
+            <value>
+                <elementReference>$Record.npsp__Fair_Market_Value__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Opportunity_Copy_FMV_to_Amount</targetReference>
+        </connector>
+        <filterFormula>IF({!$Record.Amount} = 0 || ISBLANK({!$Record.Amount}),true, false ) &amp;&amp;
+{!$Record.RecordType.DeveloperName} = &apos;InKindGift&apos; &amp;&amp;
+NOT(ISBLANK({!$Record.npsp__Fair_Market_Value__c})) &amp;&amp;
+(ISCHANGED({!$Record.Amount}) || ISCHANGED({!$Record.npsp__Fair_Market_Value__c}) || ISNEW())</filterFormula>
+        <object>Opportunity</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>

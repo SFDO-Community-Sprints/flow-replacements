@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>64.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <description>Copies the value of the home phone field to the main phone field, labeled as business phone in flows.</description>
+        <name>HomeToMain</name>
+        <label>Copy Home Phone to Main</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.HomePhone</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Copy mobile phone value to main.</description>
+        <name>MobileToMain</name>
+        <label>Copy Mobile Phone to Main</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.MobilePhone</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Copies the value of the Other phone field to the main phone, mislabeled as business in flows.</description>
+        <name>OtherToMain</name>
+        <label>Copy Other Phone to Main</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.OtherPhone</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <description>Copies the value of work phone to the standard phone field, which the flow labels as business phone but it&apos;s actually the main phone.</description>
+        <name>WorkToMain</name>
+        <label>Copy Work To Main Phone</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Phone</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>$Record.npe01__WorkPhone__c</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Checks if the home phone field is null. If not, the value is copied to the standard phone field.</description>
+        <name>Check_Null_Value_Home</name>
+        <label>Check Null Value for Home</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Null</defaultConnectorLabel>
+        <rules>
+            <name>Copy_1_of_Not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.HomePhone</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>HomeToMain</targetReference>
+            </connector>
+            <label>Not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the mobile phone field is null. If not, the value is copied to the standard phone field.</description>
+        <name>Check_Null_Value_Mobile</name>
+        <label>Check Null Value for Mobile</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Null</defaultConnectorLabel>
+        <rules>
+            <name>Copy_3_of_Not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.MobilePhone</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>MobileToMain</targetReference>
+            </connector>
+            <label>Not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the other phone field is null. If not, the value is copied to the standard phone field.</description>
+        <name>Check_Null_Value_Other</name>
+        <label>Check Null Value for Other</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Null</defaultConnectorLabel>
+        <rules>
+            <name>Copy_4_of_Not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.OtherPhone</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>OtherToMain</targetReference>
+            </connector>
+            <label>Not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks if the work phone field is null. If not, the value is copied to the standard phone field.</description>
+        <name>Check_Null_Value_Work</name>
+        <label>Check Null Value on work</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Copy_2_of_Not_null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__WorkPhone__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>WorkToMain</targetReference>
+            </connector>
+            <label>Not null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>For each value in the preferred phone picklist, if the associated phone field is not null, copy it to the standard phone field. Note that the flow will show the standard phone field as business phone for some reason.]</description>
+        <name>Handle_Number_change_or_Preference_change</name>
+        <label>Handle Number change or Preference change</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Work</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__PreferredPhone__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Work</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Null_Value_Work</targetReference>
+            </connector>
+            <label>Work</label>
+        </rules>
+        <rules>
+            <name>Home</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__PreferredPhone__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Home</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Null_Value_Home</targetReference>
+            </connector>
+            <label>Home</label>
+        </rules>
+        <rules>
+            <name>Mobile</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__PreferredPhone__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Mobile</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Null_Value_Mobile</targetReference>
+            </connector>
+            <label>Mobile</label>
+        </rules>
+        <rules>
+            <name>Other</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.npe01__PreferredPhone__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Other</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Null_Value_Other</targetReference>
+            </connector>
+            <label>Other</label>
+        </rules>
+    </decisions>
+    <description>This flow consists of a single main decision element, which checks to see which preferred phone option is selected. For each value, if the associated field is not null, then its value is copied to the main phone field.
+
+Note: for some reason, in flow the main phone field shows up as business phone, though this is not the case in object manager.
+
+This flow replaces workflows which do the same thing and have been deactivated.</description>
+    <environments>Default</environments>
+    <formulas>
+        <name>PathChooser</name>
+        <dataType>Number</dataType>
+        <expression>IF({!UpdateBasedOnStandardChange},1,IF({!UpdateEmailOREmailPreference},2,0))</expression>
+        <scale>0</scale>
+    </formulas>
+    <formulas>
+        <name>UpdateBasedOnStandardChange</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+       ISNEW(),
+       ISCHANGED({!$Record.Phone})
+)</expression>
+    </formulas>
+    <formulas>
+        <name>UpdateEmailOREmailPreference</name>
+        <dataType>Boolean</dataType>
+        <expression>OR(
+ISCHANGED({!$Record.npe01__PreferredPhone__c}),
+ISCHANGED({!$Record.HomePhone}),
+ISCHANGED({!$Record.MobilePhone}),
+ISCHANGED({!$Record.npe01__WorkPhone__c}),
+ISCHANGED({!$Record.OtherPhone})
+)</expression>
+    </formulas>
+    <interviewLabel>@Contact __ Create/Update Before Save _ Update Standard Phone Field with Preferred {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>@Contact __ Create/Update Before Save _ Update Standard Phone Field with Preferred</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Handle_Number_change_or_Preference_change</targetReference>
+        </connector>
+        <filterFormula>OR(
+   OR(
+       ISCHANGED({!$Record.npe01__PreferredPhone__c}),
+       ISCHANGED({!$Record.HomePhone}),
+       ISCHANGED({!$Record.MobilePhone}),
+       ISCHANGED({!$Record.npe01__WorkPhone__c}),
+       ISCHANGED({!$Record.OtherPhone})),
+   OR(
+       ISNEW(),
+       ISCHANGED({!$Record.Phone})
+))</filterFormula>
+        <object>Contact</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>ErrorMessage</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>The relevant phone number is empty</text>
+    </textTemplates>
+</Flow>

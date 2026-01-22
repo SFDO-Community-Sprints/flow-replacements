@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <description>Send an email to the connected Contact using the Workflow Email Alert - Volunteer Job Signup Thank You Email.
+This can be adjusted by updating the Email Alert Settings from Setup.</description>
+        <name>Volunteer_Job_Signup_Thank_You_Email</name>
+        <label>Volunteer Job Signup Thank You Email</label>
+        <locationX>182</locationX>
+        <locationY>923</locationY>
+        <actionName>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Job_Signup_Thank_You_Email_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <connector>
+            <targetReference>Create_Email_Sent_Task</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Job_Signup_Thank_You_Email_Alert</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <actionCalls>
+        <description>Send an email to the connected Contact&apos;s Record Owner using the Workflow Email Alert - Volunteer Job Signup Thank You Email
+This can be adjusted by updating the Email Alert Settings from Setup.</description>
+        <name>Volunteer_Signup_Manager_Notification_Email</name>
+        <label>Volunteer Signup Manager Notification Email</label>
+        <locationX>182</locationX>
+        <locationY>1139</locationY>
+        <actionName>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Job_Signup_Notification_Email_Alert</actionName>
+        <actionType>emailAlert</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>SObjectRowId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>GW_Volunteers__Volunteer_Hours__c.GW_Volunteers__Volunteer_Job_Signup_Notification_Email_Alert</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
+    <apiVersion>63.0</apiVersion>
+    <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <decisions>
+        <description>Checks to see if End Date field is null.  If not, executes default</description>
+        <name>End_Date_Value_Check</name>
+        <label>End Date Value Check</label>
+        <locationX>182</locationX>
+        <locationY>623</locationY>
+        <defaultConnector>
+            <targetReference>Volunteer_Job_Signup_Thank_You_Email</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>End_Date_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.GW_Volunteers__End_Date__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_End_Date_with_Start_Date</targetReference>
+            </connector>
+            <label>End Date Null</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <description>Checks to see if Planned Start Date &amp; Time field is null.  If not, executes default</description>
+        <name>Start_Date_Value_Check</name>
+        <label>Start Date Value Check</label>
+        <locationX>182</locationX>
+        <locationY>323</locationY>
+        <defaultConnector>
+            <targetReference>End_Date_Value_Check</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Planned_Start_Date_Null</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.GW_Volunteers__Planned_Start_Date_Time__c</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Planned_Start_Date_Time_with_Shift_Start_Date_Time</targetReference>
+            </connector>
+            <label>Planned Start Date Null</label>
+        </rules>
+    </decisions>
+    <description>When a Volunteer Hours record is created and marked with a status of &quot;Web Sign Up&quot;, send Contact the Volunteer Signup Thank You email alert and send Volunteer Mgr a Signup email alert, set Planned Start Date to Shift Start Date if null, and set End Date to Shift Start Date if null.</description>
+    <environments>Default</environments>
+    <interviewLabel>V4S Shift On Create {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>V4S || CREATE | Updates Date fields and Send Emails to Volunteer and Manager</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordCreates>
+        <description>Create a completed task to record the action of sending the Volunteer Job Signup Thank You Email email template.</description>
+        <name>Create_Email_Sent_Task</name>
+        <label>Create Email Sent Task</label>
+        <locationX>182</locationX>
+        <locationY>1031</locationY>
+        <connector>
+            <targetReference>Volunteer_Signup_Manager_Notification_Email</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>ActivityDate</field>
+            <value>
+                <elementReference>$Flow.CurrentDate</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Description</field>
+            <value>
+                <stringValue> An automatic thank you email has been sent to the contact for signing up for a Volunteer Job..</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>OwnerId</field>
+            <value>
+                <elementReference>$Record.CreatedBy.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Status</field>
+            <value>
+                <stringValue>Completed</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Subject</field>
+            <value>
+                <stringValue>Volunteer Job Signup Thank You Email Sent</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Type</field>
+            <value>
+                <stringValue>Other</stringValue>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhatId</field>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>WhoId</field>
+            <value>
+                <elementReference>$Record.GW_Volunteers__Contact__r.Id</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Task</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <recordUpdates>
+        <description>Update End Date with Start Date</description>
+        <name>Update_End_Date_with_Start_Date</name>
+        <label>Update End Date with Start Date</label>
+        <locationX>50</locationX>
+        <locationY>731</locationY>
+        <connector>
+            <targetReference>Volunteer_Job_Signup_Thank_You_Email</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>GW_Volunteers__End_Date__c</field>
+            <value>
+                <elementReference>$Record.GW_Volunteers__Start_Date__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <recordUpdates>
+        <description>Update Planned Start Date/Time with Shift Start Date/Time</description>
+        <name>Update_Planned_Start_Date_Time_with_Shift_Start_Date_Time</name>
+        <label>Update Planned Start Date/Time with Shift Start Date/Time</label>
+        <locationX>50</locationX>
+        <locationY>431</locationY>
+        <connector>
+            <targetReference>End_Date_Value_Check</targetReference>
+        </connector>
+        <inputAssignments>
+            <field>GW_Volunteers__Planned_Start_Date_Time__c</field>
+            <value>
+                <elementReference>$Record.GW_Volunteers__Shift_Start_Date_Time__c</elementReference>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Start_Date_Value_Check</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>GW_Volunteers__Status__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Web Sign Up</stringValue>
+            </value>
+        </filters>
+        <object>GW_Volunteers__Volunteer_Hours__c</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
