@@ -1,10 +1,7 @@
-# workflow-replacements
-Replace workflow &amp; process builder in NPSP and V4S with flow.
-* 'Contact Email Sync' Flow - combines the following NPSP Workflow Rules related to Contact Emails: Contact.EmailChanged_Alternate, Contact.EmailChanged_Personal, Contact.EmailChanged_Work, Contact.Preferred_Email__c, and Email only: Paste to Work
-
-
 # NPSP Workflow Replacements
-Create Flows to consolidate and replace Workflow Rules for NPSP and V4S packages
+This site guides Salesforce Admins using Nonprofit Success Pack in recreating legacy NPSP workflows as Flows instead.  Using Flows instead of workflows allows Admins to take advatage of the benefits of Flows, and also allows Adsmins to move away from workflows as they become obsolete on the Salesforce Platform. 
+
+Workflow Rules for NPSP and V4S packages
 
 # Project Overview
 ## Vision & Goals
