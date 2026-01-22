@@ -37,3 +37,9 @@ gh_edit_view_mode: "tree" # "tree" or "edit" if you want the user to jump into t
 # logo: "/assets/images/dlrs-badge.png"
 
 # "favicon.ico" used to change default favicon
+
+nav_external_links:
+  - title: OSC Trailblazer Community Page
+    url: https://trailhead.salesforce.com/trailblazer-community/topics/opensourcecommons
+    hide_icon: false
+    opens_in_new_tab: true
