@@ -5,7 +5,8 @@ This site guides Salesforce Admins using Nonprofit Success Pack in recreating le
 ## Vision & Goals
 * Design and document flows to replace all 20 NPSP (v3) and V4S workflow rules
 * Create unmanaged packages with replacement flows
-* Identify/document considerations for earlier NPSP flow versions
+* Create trailblazer group for cases and support
+
 
 ## Project Vertical
 Nonprofit
