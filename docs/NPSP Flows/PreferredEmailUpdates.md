@@ -114,20 +114,34 @@ Default Outcome
 
 ## Set Assignment under Alternate
 **Name = Set Alternate Email**
+```
     - Triggering Contact > Alternate Email = Triggering Contact > Email
     - End
-
+```
 ## Set Assignment under Personal
 **Name = Set Personal Email**
+```
     - Triggering Contact > Personal Email = Triggering Contact > Email
     - End
-
+```
 ## Set Assignment under Work
 **Name = Set Work Email** 
+```
     - Triggering Contact > Work Email = Triggering Contact > Email
     - End
-
+```
 ## Set Assignment under NPSP Email fields are changed
 **Name = Assign new Email value**
+```
     - Triggering Contact > Email = formulaPreferredEmailAddress 
     - End
+```
+## Set Assignment under No Preferred Email set
+**Name = Set Preferred Email to Work**
+```
+    - Triggering Contact > Preferred Email = Work
+    - Triggering Contact > Work Email = Triggering Contact > Email
+    - End
+```
+
+# Test, and Activate
