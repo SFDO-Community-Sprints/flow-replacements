@@ -66,31 +66,33 @@ NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 
 ## Add Decision
 ### Name = Email Update Needed
-    1. Standard Email is New or Changed
-        - Custom Logic = (1 or 3) and 2 and 4
+Outcome 1 Standard Email is New or Changed
+Custom Logic = (1 or 3) and 2 and 4
 ```
 1. Record Prior Values Triggering Contact > Email is Blank = TRUE
 2. Triggering Contact > Email Is Blank = TRUE
 3. Triggering Contact > Email Is Changed = TRUE
 4. Triggering Contact > Preferred Email is Blank = FALSE
 ```
-    2. NPSP Email fields are changed
-        - Any Conditions (OR)
+Outcome 2 NPSP Email fields are changed
+Any Conditions (OR)
+```
 - Triggering Contact > Alternate Email Is Changed is TRUE
 - Triggering Contact > Work Email Is Changed is TRUE
 - Triggering Contact > Personal Email Is Changed is TRUE
 - Triggering Contact > Email Is Blank is TRUE
 - Triggering Contact > Preferred Email Is Changed is TRUE
-
-    3. No Preferred Email Set
-        - All Conditions (AND)
+```
+Outcome 3 No Preferred Email Set
+All Conditions (AND)
+```
 - Triggering Contact > Alternate Email Is Blank is TRUE
 - Triggering Contact > Work Email Is Blank is TRUE
 - Triggering Contact > Personal Email Is Blank is TRUE
 - Triggering Contact > Email Is Blank is TRUE
 - Triggering Contact > Preferred Email Is Blank is TRUE
-
-  4. Default
+```
+Default Outcome
 <hr>
 
 ## Add Decision under Standard Email is New or Changed
