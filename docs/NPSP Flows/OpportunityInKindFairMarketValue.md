@@ -35,5 +35,6 @@ NOT(ISBLANK({!$Record.npsp__Fair_Market_Value__c}))
 - Set Field Values
 ```
 Amount <--- Triggering Opportunity > Fair Market Value
+```
 
 #Test and Activate
