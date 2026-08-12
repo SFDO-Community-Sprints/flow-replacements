@@ -11,13 +11,13 @@ has_children: false
 
 ###How to create the Email Flow with Step by Step Instructions if you don’t want to install a package
 
-
-
-##Configure Start
+##Configure Start Settings
 - Record Triggered Flow
 - Contact
 - Created or Updated
 - Formula Evaluates to True
+- Every time
+- Fast Field Updates
 
 ```
 OR(
@@ -31,10 +31,9 @@ AND(ISNULL({!$Record__Prior.Email}), NOT(ISNULL({!$Record.Email})))
 )
 ```
 
+<hr>
 
 
-Every time
-Fast Field Updates
 Create Resources
 Formula 
 Name = formulaPreferredEmailAddress
