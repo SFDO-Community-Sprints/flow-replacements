@@ -64,9 +64,9 @@ NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 ```
 <hr>
 
-### Add Decision
-## Name = Email Update Needed
-    - Standard Email is New or Changed
+## Add Decision
+# Name = Email Update Needed
+    1. Standard Email is New or Changed
         - Custom Logic = (1 or 3) and 2 and 4
 ```
 1. Record Prior Values Triggering Contact > Email is Blank = TRUE
@@ -74,42 +74,48 @@ NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 3. Triggering Contact > Email Is Changed = TRUE
 4. Triggering Contact > Preferred Email is Blank = FALSE
 ```
-NPSP Email fields are changed
-Any Conditions (OR)
+    2. NPSP Email fields are changed
+        - Any Conditions (OR)
 - Triggering Contact > Alternate Email Is Changed is TRUE
 - Triggering Contact > Work Email Is Changed is TRUE
 - Triggering Contact > Personal Email Is Changed is TRUE
 - Triggering Contact > Email Is Blank is TRUE
 - Triggering Contact > Preferred Email Is Changed is TRUE
-No Preferred Email Set
-All Conditions (AND)
-Triggering Contact > Alternate Email Is Blank is TRUE
-Triggering Contact > Work Email Is Blank is TRUE
-Triggering Contact > Personal Email Is Blank is TRUE
-Triggering Contact > Email Is Blank is TRUE
-Triggering Contact > Preferred Email Is Blank is TRUE
-Default
-Add Decision under Standard Email is New or Changed
-Name = Preferred Email
-Alternate
-Triggering Contact > Preferred Email = Alternate
-Personal
-Triggering Contact > Preferred Email = Personal
-Work
-Triggering Contact > Preferred Email = Work
-Default	
-Set Assignment under Alternate
-Name = Set Alternate Email 
-Triggering Contact > Alternate Email = Triggering Contact > Email
-End
-Set Assignment under Personal
-Name = Set Personal Email 
-Triggering Contact > Personal Email = Triggering Contact > Email
-End
-Set Assignment under Work
-Name = SetWork Email 
-Triggering Contact > Work Email = Triggering Contact > Email
-End
-Set Assignment under NPSP Email fields are changed
-Name = Assign new Email value
-Triggering Contact > Email = formulaPreferredEmailAddress 
+
+    3. No Preferred Email Set
+        - All Conditions (AND)
+- Triggering Contact > Alternate Email Is Blank is TRUE
+- Triggering Contact > Work Email Is Blank is TRUE
+- Triggering Contact > Personal Email Is Blank is TRUE
+- Triggering Contact > Email Is Blank is TRUE
+- Triggering Contact > Preferred Email Is Blank is TRUE
+
+  4. Default
+<hr>
+
+## Add Decision under Standard Email is New or Changed
+# Name = Preferred Email
+
+    1. Alternate
+        - Triggering Contact > Preferred Email = Alternate
+    2. Personal
+        - Triggering Contact > Preferred Email = Personal
+    3. Work
+        - Triggering Contact > Preferred Email = Work
+    4. Default	
+
+## Set Assignment under Alternate
+# Name = Set Alternate Email 
+    - Triggering Contact > Alternate Email = Triggering Contact > Email
+    - End
+## Set Assignment under Personal
+# Name = Set Personal Email 
+    - Triggering Contact > Personal Email = Triggering Contact > Email
+-     End
+## Set Assignment under Work
+# Name = Set Work Email 
+    - Triggering Contact > Work Email = Triggering Contact > Email
+    - End
+## Set Assignment under NPSP Email fields are changed
+# Name = Assign new Email value
+    - Triggering Contact > Email = formulaPreferredEmailAddress 
