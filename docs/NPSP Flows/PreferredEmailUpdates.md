@@ -20,6 +20,7 @@ has_children: false
 - Fast Field Updates
 
 ```
+##Start Formula
 OR(
 ISCHANGED({!$Record.Email}),
 ISBLANK({!$Record.Email}),
@@ -34,11 +35,11 @@ AND(ISNULL({!$Record__Prior.Email}), NOT(ISNULL({!$Record.Email})))
 <hr>
 
 
-Create Resources
-Formula 
-Name = formulaPreferredEmailAddress
-Description = Returns the value of whichever email address is set as Preferred. If no NPSP email addresses are populated returns the value of the standard Email field.
-Data Type = Text
+##Create Resources
+- Formula 
+- Name = formulaPreferredEmailAddress
+- Description = Returns the value of whichever email address is set as Preferred. If no NPSP email addresses are populated returns the value of the standard Email field.
+- Data Type = Text
 
 ```
 
@@ -51,11 +52,10 @@ IF({!formulaNPSPEmailPresent}, (CASE({!$Record.npe01__Preferred_Email__c},
 )
 ```
 
-
-Formula 
-Name = formulaNPSPEmailPresent
-Description = Returns true if at least one NPSP email field is populated.
-Data Type = Boolean
+- Formula 
+- Name = formulaNPSPEmailPresent
+- Description = Returns true if at least one NPSP email field is populated.
+- Data Type = Boolean
 
 ```
 OR(
@@ -64,28 +64,25 @@ NOT(ISBLANK({!$Record.npe01__HomeEmail__c})),
 NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 )
 ```
+<hr>
 
-
-
-
-
-
-
-Add Decision
-Name = Email Update Needed
-Standard Email is New or Changed
-Custom Logic = (1 or 3) and 2 and 4
-Record Prior Values Triggering Contact > Email is Blank = TRUE
-Triggering Contact > Email Is Blank = TRUE
-Triggering Contact > Email Is Changed = TRUE
-Triggering Contact > Preferred Email is Blank = FALSE
+###Add Decision
+##Name = Email Update Needed
+    - Standard Email is New or Changed
+        - Custom Logic = (1 or 3) and 2 and 4
+```
+1. Record Prior Values Triggering Contact > Email is Blank = TRUE
+2. Triggering Contact > Email Is Blank = TRUE
+3. Triggering Contact > Email Is Changed = TRUE
+4. Triggering Contact > Preferred Email is Blank = FALSE
+```
 NPSP Email fields are changed
 Any Conditions (OR)
-Triggering Contact > Alternate Email Is Changed is TRUE
-Triggering Contact > Work Email Is Changed is TRUE
-Triggering Contact > Personal Email Is Changed is TRUE
-Triggering Contact > Email Is Blank is TRUE
-Triggering Contact > Preferred Email Is Changed is TRUE
+- Triggering Contact > Alternate Email Is Changed is TRUE
+- Triggering Contact > Work Email Is Changed is TRUE
+- Triggering Contact > Personal Email Is Changed is TRUE
+- Triggering Contact > Email Is Blank is TRUE
+- Triggering Contact > Preferred Email Is Changed is TRUE
 No Preferred Email Set
 All Conditions (AND)
 Triggering Contact > Alternate Email Is Blank is TRUE
