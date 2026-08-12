@@ -9,9 +9,9 @@ has_children: false
 # Preferred Email NPSP Updates
 
 
-###How to create the Email Flow with Step by Step Instructions if you don’t want to install a package
+### How to create the Email Flow with Step by Step Instructions if you don’t want to install a package
 
-##Configure Start Settings
+## Configure Start Settings
 - Record Triggered Flow
 - Contact
 - Created or Updated
@@ -20,7 +20,6 @@ has_children: false
 - Fast Field Updates
 
 ```
-##Start Formula
 OR(
 ISCHANGED({!$Record.Email}),
 ISBLANK({!$Record.Email}),
@@ -35,14 +34,13 @@ AND(ISNULL({!$Record__Prior.Email}), NOT(ISNULL({!$Record.Email})))
 <hr>
 
 
-##Create Resources
+## Create Your Resources
 - Formula 
 - Name = formulaPreferredEmailAddress
 - Description = Returns the value of whichever email address is set as Preferred. If no NPSP email addresses are populated returns the value of the standard Email field.
 - Data Type = Text
 
 ```
-
 IF({!formulaNPSPEmailPresent}, (CASE({!$Record.npe01__Preferred_Email__c}, 
     'Alternate', {!AlternateEmail}, 
     'Personal', {!PersonalEmail},
@@ -66,8 +64,8 @@ NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 ```
 <hr>
 
-###Add Decision
-##Name = Email Update Needed
+### Add Decision
+## Name = Email Update Needed
     - Standard Email is New or Changed
         - Custom Logic = (1 or 3) and 2 and 4
 ```
