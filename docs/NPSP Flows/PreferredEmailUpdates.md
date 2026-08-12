@@ -1,3 +1,14 @@
+---
+layout: default
+title: Preferred Email Updates
+nav_order: 2
+parent: NPSP Flows
+has_children: false
+---
+
+# Preferred Email NPSP Updates
+
+
 How to create the Email Flow with Step by Step Instructions if you don’t want to install a package
 
 
