@@ -55,12 +55,13 @@ Name = formulaNPSPEmailPresent
 Description = Returns true if at least one NPSP email field is populated.
 Data Type = Boolean
 
+```
 OR(
 NOT(ISBLANK({!$Record.npe01__AlternateEmail__c})),
 NOT(ISBLANK({!$Record.npe01__HomeEmail__c})),
 NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 )
-
+```
 
 
 
