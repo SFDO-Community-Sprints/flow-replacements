@@ -65,7 +65,7 @@ NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 <hr>
 
 ## Add Decision
-### Name = Email Update Needed
+**Name = Email Update Needed**
 Outcome 1 Standard Email is New or Changed
 Custom Logic = (1 or 3) and 2 and 4
 ```
@@ -96,7 +96,7 @@ Default Outcome
 <hr>
 
 ## Add Decision under Standard Email is New or Changed
-### Name = Preferred Email
+**Name = Preferred Email**
 
 Outcome 1 Alternate
 ```
@@ -113,21 +113,21 @@ Triggering Contact > Preferred Email = Work
 Default Outcome	
 
 ## Set Assignment under Alternate
-### Name = Set Alternate Email 
+**Name = Set Alternate Email**
     - Triggering Contact > Alternate Email = Triggering Contact > Email
     - End
 
 ## Set Assignment under Personal
-### Name = Set Personal Email 
+**Name = Set Personal Email**
     - Triggering Contact > Personal Email = Triggering Contact > Email
     - End
 
 ## Set Assignment under Work
-### Name = Set Work Email 
+**Name = Set Work Email** 
     - Triggering Contact > Work Email = Triggering Contact > Email
     - End
 
 ## Set Assignment under NPSP Email fields are changed
-### Name = Assign new Email value
+**Name = Assign new Email value**
     - Triggering Contact > Email = formulaPreferredEmailAddress 
     - End
