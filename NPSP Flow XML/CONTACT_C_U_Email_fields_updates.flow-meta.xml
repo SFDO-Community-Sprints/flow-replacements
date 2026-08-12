@@ -3,8 +3,22 @@
     <apiVersion>63.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Set_Alternate</name>
-        <label>Set Alternate</label>
+        <description>Sets the Email field to the value of the contact&apos;s preferred email.</description>
+        <name>Assign_new_Email_value</name>
+        <label>Assign new Email value</label>
+        <locationX>1018</locationX>
+        <locationY>395</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.Email</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>formulaPreferredEmailAddress</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <assignments>
+        <name>Set_Alternate_Email</name>
+        <label>Set Alternate Email</label>
         <locationX>50</locationX>
         <locationY>503</locationY>
         <assignmentItems>
@@ -16,22 +30,8 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <description>Copies Work email field into the Email field if there is no preferred email.</description>
-        <name>Set_Default_Value</name>
-        <label>Set Default Value</label>
-        <locationX>2690</locationX>
-        <locationY>503</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Email</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>WorkEmail</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <name>Set_Personal</name>
-        <label>Set Personal</label>
+        <name>Set_Personal_Email</name>
+        <label>Set Personal Email</label>
         <locationX>314</locationX>
         <locationY>503</locationY>
         <assignmentItems>
@@ -43,10 +43,9 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <description>If all of these fields are null: npe01__Preferred_Email__c, npe01__WorkEmail__c, npe01__HomeEmail__c, npe01__AlternateEmail__c then Work Email is updated with the email address in the standard Email field and Preferred Email is set to Work.</description>
-        <name>Set_Preferred_and_Work_Email</name>
-        <label>Set Preferred and Work Email</label>
-        <locationX>2954</locationX>
+        <name>Set_Preferred_Email_to_Work</name>
+        <label>Set Preferred Email to Work</label>
+        <locationX>1282</locationX>
         <locationY>395</locationY>
         <assignmentItems>
             <assignToReference>$Record.npe01__Preferred_Email__c</assignToReference>
@@ -64,8 +63,8 @@
         </assignmentItems>
     </assignments>
     <assignments>
-        <name>Set_Work</name>
-        <label>Set Work</label>
+        <name>Set_Work_Email</name>
+        <label>Set Work Email</label>
         <locationX>578</locationX>
         <locationY>503</locationY>
         <assignmentItems>
@@ -76,179 +75,140 @@
             </value>
         </assignmentItems>
     </assignments>
-    <assignments>
-        <description>Copies Alternate Email field into Email field when Alternate is set to preferred email.</description>
-        <name>To_Alternate</name>
-        <label>To Alternate</label>
-        <locationX>1106</locationX>
-        <locationY>611</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Email</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>AlternateEmail</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <description>Copies Personal Email field into the Email field when Personal is set to preferred email.</description>
-        <name>To_Personal</name>
-        <label>To Personal</label>
-        <locationX>1634</locationX>
-        <locationY>611</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Email</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>PersonalEmail</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
-    <assignments>
-        <description>Copies Work Email field into the Email field when Work is set to Preferred Email.</description>
-        <name>To_Work</name>
-        <label>To Work</label>
-        <locationX>2162</locationX>
-        <locationY>611</locationY>
-        <assignmentItems>
-            <assignToReference>$Record.Email</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <elementReference>WorkEmail</elementReference>
-            </value>
-        </assignmentItems>
-    </assignments>
     <decisions>
-        <description>Checks for null value in personal email field so that null values are not copied to the email field.</description>
-        <name>Copy_1_of_Check_for_Null_Values</name>
-        <label>Check for Null Values</label>
-        <locationX>1766</locationX>
-        <locationY>503</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Copy_1_of_Not_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__HomeEmail__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>To_Personal</targetReference>
-            </connector>
-            <label>Not Null</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <description>Checks for null value in alternate email field so that null values are not copied to the email field.</description>
-        <name>Copy_3_of_Check_for_Null_Values</name>
-        <label>Check for Null Values</label>
-        <locationX>1238</locationX>
-        <locationY>503</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Copy_3_of_Not_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__AlternateEmail__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>To_Alternate</targetReference>
-            </connector>
-            <label>Not Null</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <description>Checks for null value in work email field so that null values are not copied to the email field.</description>
-        <name>Copy_4_of_Check_for_Null_Values</name>
-        <label>Check for Null Values</label>
-        <locationX>2294</locationX>
-        <locationY>503</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>Copy_4_of_Not_Null</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__WorkEmail__c</leftValueReference>
-                <operator>IsNull</operator>
-                <rightValue>
-                    <booleanValue>false</booleanValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>To_Work</targetReference>
-            </connector>
-            <label>Not Null</label>
-        </rules>
-    </decisions>
-    <decisions>
-        <description>Decision element - Path 1: If preferred email field is set and email is changed, referenced preferred email is updated; Path 2: If preferred email is changed, email field is updated; Path 3: If email is updated, but no preferred email option is set</description>
-        <name>Path_Chooser</name>
-        <label>Path Chooser</label>
-        <locationX>1832</locationX>
+        <name>Email_Update_Needed</name>
+        <label>Email Update Needed</label>
+        <locationX>986</locationX>
         <locationY>287</locationY>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Outcome_1_EmailChangePath</name>
-            <conditionLogic>and</conditionLogic>
+            <name>Standard_Email_is_New_or_Changed</name>
+            <conditionLogic>(1 OR 3) AND 2 AND 4</conditionLogic>
             <conditions>
-                <leftValueReference>PathChooser</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>$Record__Prior.Email</leftValueReference>
+                <operator>IsBlank</operator>
                 <rightValue>
-                    <numberValue>1.0</numberValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Email</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_Preferred_Email</targetReference>
+                <targetReference>Preferred_Email</targetReference>
             </connector>
-            <label>Outcome 1 - EmailChangePath</label>
+            <label>Standard Email is New or Changed</label>
         </rules>
         <rules>
-            <name>Outcome_2_SetEmailBasedOnPreferredEmailPath</name>
-            <conditionLogic>and</conditionLogic>
+            <name>NPSP_Email_fields_are_changed</name>
+            <conditionLogic>or</conditionLogic>
             <conditions>
-                <leftValueReference>PathChooser</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>$Record.npe01__AlternateEmail__c</leftValueReference>
+                <operator>IsChanged</operator>
                 <rightValue>
-                    <numberValue>2.0</numberValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__HomeEmail__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__WorkEmail__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
+                <operator>IsChanged</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_Email</targetReference>
+                <targetReference>Assign_new_Email_value</targetReference>
             </connector>
-            <label>Outcome 2 - SetEmailBasedOnPreferredEmailPath</label>
+            <label>NPSP Email fields are changed</label>
         </rules>
         <rules>
-            <name>Outcome_3_PasteToWorkPath</name>
+            <name>No_Preferred_Email_set</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>PathChooser</leftValueReference>
-                <operator>EqualTo</operator>
+                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
+                <operator>IsBlank</operator>
                 <rightValue>
-                    <numberValue>3.0</numberValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__AlternateEmail__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__HomeEmail__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.npe01__WorkEmail__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.Email</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_Preferred_and_Work_Email</targetReference>
+                <targetReference>Set_Preferred_Email_to_Work</targetReference>
             </connector>
-            <label>Outcome 3 - PasteToWorkPath</label>
+            <label>No Preferred Email set</label>
         </rules>
     </decisions>
     <decisions>
-        <description>Set Email field based on Preferred Email Type. If Null value, nothing happens.</description>
-        <name>Set_Email</name>
-        <label>Set Email</label>
-        <locationX>1964</locationX>
+        <name>Preferred_Email</name>
+        <label>Preferred Email</label>
+        <locationX>446</locationX>
         <locationY>395</locationY>
-        <defaultConnector>
-            <targetReference>Set_Default_Value</targetReference>
-        </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>Alternate</name>
@@ -261,13 +221,13 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Copy_3_of_Check_for_Null_Values</targetReference>
+                <targetReference>Set_Alternate_Email</targetReference>
             </connector>
             <label>Alternate</label>
         </rules>
         <rules>
             <name>Personal</name>
-            <conditionLogic>or</conditionLogic>
+            <conditionLogic>and</conditionLogic>
             <conditions>
                 <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
                 <operator>EqualTo</operator>
@@ -275,15 +235,8 @@
                     <stringValue>Personal</stringValue>
                 </rightValue>
             </conditions>
-            <conditions>
-                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Home</stringValue>
-                </rightValue>
-            </conditions>
             <connector>
-                <targetReference>Copy_1_of_Check_for_Null_Values</targetReference>
+                <targetReference>Set_Personal_Email</targetReference>
             </connector>
             <label>Personal</label>
         </rules>
@@ -298,72 +251,12 @@
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Copy_4_of_Check_for_Null_Values</targetReference>
+                <targetReference>Set_Work_Email</targetReference>
             </connector>
             <label>Work</label>
         </rules>
     </decisions>
-    <decisions>
-        <description>Sets relevent npe01__Preferred_Email__c field when Email field is updated</description>
-        <name>Set_Preferred_Email</name>
-        <label>Set Preferred Email</label>
-        <locationX>446</locationX>
-        <locationY>395</locationY>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
-        <rules>
-            <name>AlternateType</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Alternate</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Alternate</targetReference>
-            </connector>
-            <label>Alternate</label>
-        </rules>
-        <rules>
-            <name>PersonalType</name>
-            <conditionLogic>or</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Personal</stringValue>
-                </rightValue>
-            </conditions>
-            <conditions>
-                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Home</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Personal</targetReference>
-            </connector>
-            <label>Personal</label>
-        </rules>
-        <rules>
-            <name>WorkType</name>
-            <conditionLogic>and</conditionLogic>
-            <conditions>
-                <leftValueReference>$Record.npe01__Preferred_Email__c</leftValueReference>
-                <operator>EqualTo</operator>
-                <rightValue>
-                    <stringValue>Work</stringValue>
-                </rightValue>
-            </conditions>
-            <connector>
-                <targetReference>Set_Work</targetReference>
-            </connector>
-            <label>Work</label>
-        </rules>
-    </decisions>
-    <description>Simplified- Flow combining 5 NPSP workflow rules for updates of Email-related fields on the Contact. Updates RN.</description>
+    <description>Runs when email fields on the contact are changed. Populates the Email field with the contact&apos;s preferred email address and keeps it synced when it changes.</description>
     <environments>Default</environments>
     <formulas>
         <description>Value of Email field when Preferred Email Type = &apos;Alternate&apos;</description>
@@ -374,79 +267,26 @@ if(len({!$Record.npe01__WorkEmail__c})&gt;0, {!$Record.npe01__WorkEmail__c},
 {!$Record.npe01__HomeEmail__c))}</expression>
     </formulas>
     <formulas>
-        <description>Take this path if Email field is new and not blank or changed</description>
-        <name>EmailChangePath</name>
+        <description>Returns true if at least one NPSP email field is populated.</description>
+        <name>formulaNPSPEmailPresent</name>
         <dataType>Boolean</dataType>
-        <expression>AND(
-OR(AND(ISNEW(), LEN({!$Record.Email}) &gt; 0), ISCHANGED({!$Record.Email})), 
-OR(TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Work&quot;, TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Alternate&quot;, TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Home&quot;, TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Personal&quot;)
+        <expression>OR(
+NOT(ISBLANK({!$Record.npe01__AlternateEmail__c})),
+NOT(ISBLANK({!$Record.npe01__HomeEmail__c})),
+NOT(ISBLANK({!$Record.npe01__WorkEmail__c}))
 )</expression>
     </formulas>
     <formulas>
-        <description>This Formula includes Flow Entry Conditions</description>
-        <name>FlowEntryConditions</name>
-        <dataType>Boolean</dataType>
-        <expression>AND(
-    OR(
-        AND(
-            TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Alternate&quot;,
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        AND(
-            OR(
-                TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Home&quot;,
-                TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Personal&quot;
-            ),
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        AND(
-            TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Work&quot;,
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        OR(
-            LEN({!$Record.Email}) = 0,
-            ISCHANGED({!$Record.npe01__Preferred_Email__c}),
-            ISCHANGED({!$Record.npe01__WorkEmail__c}),
-            ISCHANGED({!$Record.npe01__HomeEmail__c}),
-            ISCHANGED({!$Record.npe01__AlternateEmail__c})
-        ),
-        AND(
-            NOT(ISBLANK({!$Record.Email})),
-            ISBLANK(TEXT({!$Record.npe01__Preferred_Email__c})),  /* Ensuring correct handling of picklist */
-            ISBLANK({!$Record.npe01__HomeEmail__c}),
-            ISBLANK({!$Record.npe01__AlternateEmail__c}),
-            ISBLANK({!$Record.npe01__WorkEmail__c})
-        )
-    )
+        <description>Returns the value of whichever email address is set as Preferred. If no NPSP email addresses are populated returns the value of the standard Email field.</description>
+        <name>formulaPreferredEmailAddress</name>
+        <dataType>String</dataType>
+        <expression>IF({!formulaNPSPEmailPresent}, (CASE({!$Record.npe01__Preferred_Email__c}, 
+    &apos;Alternate&apos;, {!AlternateEmail}, 
+    &apos;Personal&apos;, {!PersonalEmail},
+    &apos;Work&apos;, {!WorkEmail},
+    {!PersonalEmail})), 
+   {!$Record.Email}
 )</expression>
-    </formulas>
-    <formulas>
-        <description>Returns true if there is a value in the standard Email field AND no values in any NPSP email fields or Preferred Email,</description>
-        <name>PasteToWorkPath</name>
-        <dataType>Boolean</dataType>
-        <expression>AND(
-            NOT(ISBLANK({!$Record.Email})),
-            ISBLANK(TEXT({!$Record.npe01__Preferred_Email__c})),  
-            ISBLANK({!$Record.npe01__HomeEmail__c}),
-            ISBLANK({!$Record.npe01__AlternateEmail__c}),
-            ISBLANK({!$Record.npe01__WorkEmail__c})
-        )</expression>
-    </formulas>
-    <formulas>
-        <description>This Formula will return 1, 2, or 3, depending on the Path the Flow needs to take</description>
-        <name>PathChooser</name>
-        <dataType>Number</dataType>
-        <expression>IF({!EmailChangePath}, 1, IF({!SetEmailBasedOnPreferredEmailPath}, 2, IF({!PasteToWorkPath}, 3, 0)))</expression>
-        <scale>0</scale>
     </formulas>
     <formulas>
         <description>Value of Email field based on Preferred Email Type = Personal</description>
@@ -455,12 +295,6 @@ OR(TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Work&quot;, TEXT({!$Record
         <expression>if(len({!$Record.npe01__HomeEmail__c)}&gt;0, {!$Record.npe01__HomeEmail__c},
 if(len({!$Record.npe01__WorkEmail__c)}&gt;0, {!$Record.npe01__WorkEmail__c},
 {!$Record.npe01__AlternateEmail__c}))</expression>
-    </formulas>
-    <formulas>
-        <description>Set standard Email field based on the Preferred Email value.</description>
-        <name>SetEmailBasedOnPreferredEmailPath</name>
-        <dataType>Boolean</dataType>
-        <expression>OR( LEN({!$Record.Email})=0, ISCHANGED({!$Record.npe01__Preferred_Email__c}), ISCHANGED({!$Record.npe01__WorkEmail__c}), ISCHANGED({!$Record.npe01__HomeEmail__c}), ISCHANGED({!$Record.npe01__AlternateEmail__c}))</expression>
     </formulas>
     <formulas>
         <name>WorkEmail</name>
@@ -491,61 +325,23 @@ if(len({!$Record.npe01__HomeEmail__c})&gt;0, {!$Record.npe01__HomeEmail__c},
     </processMetadataValues>
     <processType>AutoLaunchedFlow</processType>
     <start>
-        <locationX>1706</locationX>
+        <locationX>860</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Path_Chooser</targetReference>
+            <targetReference>Email_Update_Needed</targetReference>
         </connector>
-        <filterFormula>AND(
-    OR(
-        AND(
-            TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Alternate&quot;,
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        AND(
-            OR(
-                TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Home&quot;,
-                TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Personal&quot;
-            ),
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        AND(
-            TEXT({!$Record.npe01__Preferred_Email__c}) = &quot;Work&quot;,
-            OR(
-                AND(ISNEW(), LEN({!$Record.Email}) &gt; 0),
-                ISCHANGED({!$Record.Email})
-            )
-        ),
-        OR(
-            LEN({!$Record.Email}) = 0,
-            ISCHANGED({!$Record.npe01__Preferred_Email__c}),
-            ISCHANGED({!$Record.npe01__WorkEmail__c}),
-            ISCHANGED({!$Record.npe01__HomeEmail__c}),
-            ISCHANGED({!$Record.npe01__AlternateEmail__c})
-        ),
-        AND(
-            NOT(ISBLANK({!$Record.Email})),
-            ISBLANK(TEXT({!$Record.npe01__Preferred_Email__c})),  /* Ensuring correct handling of picklist */
-            ISBLANK({!$Record.npe01__HomeEmail__c}),
-            ISBLANK({!$Record.npe01__AlternateEmail__c}),
-            ISBLANK({!$Record.npe01__WorkEmail__c})
-        )
-    )
+        <filterFormula>OR(
+ISCHANGED({!$Record.Email}),
+ISBLANK({!$Record.Email}),
+ISCHANGED({!$Record.npe01__Preferred_Email__c}),
+ISCHANGED({!$Record.npe01__AlternateEmail__c}),
+ISCHANGED({!$Record.npe01__HomeEmail__c}),
+ISCHANGED({!$Record.npe01__WorkEmail__c}),
+AND(ISNULL({!$Record__Prior.Email}), NOT(ISNULL({!$Record.Email})))
 )</filterFormula>
         <object>Contact</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
     </start>
     <status>Active</status>
-    <textTemplates>
-        <name>ErrorMessage</name>
-        <isViewedAsPlainText>false</isViewedAsPlainText>
-        <text>&lt;p&gt;Relevant field is empty&lt;/p&gt;</text>
-    </textTemplates>
 </Flow>

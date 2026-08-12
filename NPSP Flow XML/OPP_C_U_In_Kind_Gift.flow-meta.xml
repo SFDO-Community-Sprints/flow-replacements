@@ -45,10 +45,9 @@
         <connector>
             <targetReference>Opportunity_Copy_FMV_to_Amount</targetReference>
         </connector>
-        <filterFormula>IF({!$Record.Amount} = 0 || ISBLANK({!$Record.Amount}),true, false ) &amp;&amp;
+        <filterFormula>({!$Record.Amount} = 0 || ISBLANK({!$Record.Amount})) &amp;&amp;
 {!$Record.RecordType.DeveloperName} = &apos;InKindGift&apos; &amp;&amp;
-NOT(ISBLANK({!$Record.npsp__Fair_Market_Value__c})) &amp;&amp;
-(ISCHANGED({!$Record.Amount}) || ISCHANGED({!$Record.npsp__Fair_Market_Value__c}) || ISNEW())</filterFormula>
+NOT(ISBLANK({!$Record.npsp__Fair_Market_Value__c}))</filterFormula>
         <object>Opportunity</object>
         <recordTriggerType>CreateAndUpdate</recordTriggerType>
         <triggerType>RecordBeforeSave</triggerType>
