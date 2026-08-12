@@ -99,12 +99,18 @@ Default Outcome
 ### Name = Preferred Email
 
 Outcome 1 Alternate
-```Triggering Contact > Preferred Email = Alternate```
-    2. Personal
-        - Triggering Contact > Preferred Email = Personal
-    3. Work
-        - Triggering Contact > Preferred Email = Work
-    4. Default	
+```
+Triggering Contact > Preferred Email = Alternate
+```
+Outcome 2 Personal
+```
+Triggering Contact > Preferred Email = Personal
+```
+Outcome 3 Work
+```
+Triggering Contact > Preferred Email = Work
+```
+Default Outcome	
 
 ## Set Assignment under Alternate
 ### Name = Set Alternate Email 
