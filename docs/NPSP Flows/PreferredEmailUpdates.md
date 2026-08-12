@@ -98,8 +98,8 @@ Default Outcome
 ## Add Decision under Standard Email is New or Changed
 ### Name = Preferred Email
 
-    1. Alternate
-        - Triggering Contact > Preferred Email = Alternate
+Outcome 1 Alternate
+```Triggering Contact > Preferred Email = Alternate```
     2. Personal
         - Triggering Contact > Preferred Email = Personal
     3. Work
